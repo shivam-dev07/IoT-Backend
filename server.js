@@ -99,35 +99,6 @@ app.use('/firmware', express.static(uploadsDir));
 const dashboardPath = path.join(__dirname, 'admin-dashboard', 'dist');
 if (fs.existsSync(dashboardPath)) {
   app.use(express.static(dashboardPath));
-  
-  // Handle React routing - serve index.html for all non-API routes
-  app.get('*', (req, res) => {
-    // Skip API and static routes
-    if (req.path.startsWith('/api') || 
-        req.path.startsWith('/firmware') || 
-        req.path === '/health') {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Endpoint not found' 
-      });
-    }
-    res.sendFile(path.join(dashboardPath, 'index.html'));
-  });
-} else {
-  // Fallback if dashboard not built
-  app.get('/', (req, res) => {
-    res.json({
-      name: 'BlazeIoT Solutions Platform',
-      version: '1.0.0',
-      description: 'Industrial IoT Backend Platform',
-      endpoints: {
-        api: '/api',
-        health: '/health',
-        websocket: '/ws',
-      },
-      note: 'Admin dashboard not built. Run: cd admin-dashboard && npm run build'
-    });
-  });
 }
 
 // Error handling middleware
@@ -141,13 +112,21 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Route not found',
+// Serve React app for all other routes (must be LAST)
+const dashboardPath = path.join(__dirname, 'admin-dashboard', 'dist');
+if (fs.existsSync(dashboardPath)) {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(dashboardPath, 'index.html'));
   });
-});
+} else {
+  // 404 handler if no dashboard
+  app.use((req, res) => {
+    res.status(404).json({
+      success: false,
+      message: 'Route not found',
+    });
+  });
+}
 
 // ==================== Server Initialization ====================
 
