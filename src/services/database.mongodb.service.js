@@ -134,6 +134,14 @@ class MongoDBService {
     return result.modifiedCount;
   }
 
+  async updateLastLogin(username) {
+    const result = await this.collections.users.updateOne(
+      { username },
+      { $set: { last_login: new Date() } }
+    );
+    return result.modifiedCount;
+  }
+
   async getAllUsers() {
     return await this.collections.users.find({}).toArray();
   }

@@ -39,8 +39,9 @@ const config = {
       uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/blazeiot',
       options: {
         maxPoolSize: 10,
-        serverSelectionTimeoutMS: 5000,
+        serverSelectionTimeoutMS: 30000,
         socketTimeoutMS: 45000,
+        connectTimeoutMS: 30000,
       },
     },
   },
