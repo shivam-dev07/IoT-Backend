@@ -136,12 +136,6 @@ const Login = () => {
               )}
             </button>
           </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-slate-400">
-              Default credentials: <span className="text-slate-300 font-mono">admin / admin123</span>
-            </p>
-          </div>
         </div>
 
         {/* Footer */}
