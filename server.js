@@ -113,7 +113,6 @@ app.use((err, req, res, next) => {
 });
 
 // Serve React app for all other routes (must be LAST)
-const dashboardPath = path.join(__dirname, 'admin-dashboard', 'dist');
 if (fs.existsSync(dashboardPath)) {
   app.get('*', (req, res) => {
     res.sendFile(path.join(dashboardPath, 'index.html'));
